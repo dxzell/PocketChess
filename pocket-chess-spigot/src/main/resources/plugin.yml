@@ -1,0 +1,6 @@
+name: PocketChess
+version: '1.0'
+main: com.dxzell.pocketchess.spigot.PocketChess
+api-version: '1.21'
+commands:
+  chess:

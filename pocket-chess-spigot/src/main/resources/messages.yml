@@ -1,0 +1,60 @@
+# In here you can adjust any plugin-sent message. After changing make sure to save the file and reload the server (if running).
+# Use Color Codes with '&'.
+messages:
+
+  # Any chess command related message:
+  chess-command:
+
+    # Use [opponent] and [mode] as placeholders for the values
+    cannot-duel-yourself: '&cYou cannot duel yourself.'
+    opponent-not-online: '&cYour requested opponent is not online.'
+    you-already-in-game: '&cYou are already playing a chess game currently.'
+    opponent-already-in-game: '&cYour requested opponent is currently playing a chess game.'
+    both-in-game: '&cBoth you and your requested opponent are currently playing a chess game.'
+    not-playing: '&cYou are currently not playing a chess game.'
+    invalid-time-mode: '&cThis time mode is invalid. Please select one from the shown time modes.'
+    already-requested-duel: '&cYou have already sent a duel request to this player. Wait for him to accept or decline.'
+    duel-request-to-expired: '&7The duel request to [opponent] has expired.'
+    duel-request-from-expired: '&7The duel request from [opponent] has expired.'
+    duel-request-received: '&3You have received a chess duel request from &6[opponent]&3, Time mode: &6[mode]&3. React with &6/chess accept [opponent] &3or &6/chess decline [opponent]&3.'
+    successfully-sent-duel-request: '&aSuccessfully sent a chess duel request to &6[opponent]&a, Time mode: &6[mode]&a.'
+    request-sender-offline: '&cThis player is not online.'
+    request-sender-playing: '&cThis player is already in a chess game.'
+    request-sender-receiver-playing: '&cBoth you and the request sender are already in a chess game.'
+    no-ongoing-request: '&cThere is no ongoing duel request from this player.'
+    you-declined-request: '&7You have declined the duel request from [opponent].'
+    opponent-declined-request: '&7[opponent] has declined your duel request.'
+
+
+  # Any chess game related message:
+  chess-game:
+
+    # Messages displayed in chat:
+    chat:
+      started: '&bYour chess game has started. You can close the chess inventory and open it with &6/chess open &bat any time.'
+      opponent-moved: '&bYour opponent has made a move. Use &6/chess open &bto open the chess board.'
+
+    # Messages displayed in the info item lore
+    info:
+      not-your-turn: '&cIt is not your turn. Wait for your opponent to make a move.'
+      no-piece-selected: '&cYou have not selected a piece to move with yet.'
+      invalid-square: '&cYour selected piece cannot move to that square.'
+      pick-promotion-piece: '&6To promote pick one of the four blue marked pieces.'
+
+    # Messages displayed in the draw item lore
+    draw:
+      # Use [cooldown] as a placeholder for the cooldown time.
+      cooldown: '&cWait &6[cooldown] &cbefore being able to send a new draw offer again.'
+      offer-received: '&7Your opponent has sent you a draw request. &6Click &7to &aaccept &7or &6ignore &7to &cdecline&7.'
+      confirm-offer: '&6Click again &7to &aconfirm &7the draw.'
+      offer-sent: '&7You have sent a draw request to your opponent.'
+
+    # Messages displayed in the surrender item lore
+    surrender:
+      confirm: '&6Click again &7to &aconfirm &7the surrender.'
+
+    # The names of the chess menu items:
+    chess-menu-item-names:
+      info-item: '&bInfo'
+      surrender-item: '&cSurrender'
+      draw-item: '&6Draw'

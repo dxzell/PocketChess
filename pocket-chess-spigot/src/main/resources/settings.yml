@@ -1,0 +1,34 @@
+# In here you can adjust general settings regarding the PocketChess plugin.
+
+# Any chess duel request related setting:
+duel-request:
+
+  # A chess duel request expires in the here set seconds:
+  duel-request-expires-in-seconds: 60
+
+# Any game related setting:
+chess-game:
+
+  # Those are the adjustable sounds that are being played at the specified events.
+  # You can use 'no.sound' if you want an event to not play a sound.
+  sounds:
+    move: 'block.anvil.break'
+    check: 'block.chain.fall'
+    win: 'entity.player.levelup'
+    loss: 'block.beacon.deactivate'
+    draw: 'event.raid.horn'
+
+  # Draw settings:
+  draw:
+
+    # Players can send a new draw offer in the here set seconds:
+    offer-cooldown-in-seconds: 60
+
+    # Sent draw offers expire in the here set seconds:
+    offer-expires-in-seconds: 30
+
+  # Surrender settings:
+  surrender:
+
+    # Needed surrender confirmation expires in the here set seconds:
+    offer-expires-in-seconds: 5
