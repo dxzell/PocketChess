@@ -14,9 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Represents the chess board state and provides access to the pieces.
- */
+/** Represents the chess board state and provides access to the pieces. */
 public final class ChessBoardImpl implements ChessBoard {
 
   @Getter @Setter private Move lastPlayedMove;
@@ -46,7 +44,7 @@ public final class ChessBoardImpl implements ChessBoard {
 
     if (movingPiece == null) {
       throw new IllegalStateException(
-              "Cannot execute move because there is no piece on the start square.");
+          "Cannot execute move because there is no piece on the start square.");
     }
 
     chessBoard[fromSquare.getColumnIndex()][fromSquare.getRowIndex()] = null;
@@ -62,16 +60,27 @@ public final class ChessBoardImpl implements ChessBoard {
     List<PieceType> typesList = Arrays.stream(types).toList();
 
     allOccupiedSquares.forEach(
-            square -> {
-              Piece piece = getPiece(square);
-              if (piece != null && piece.color() == color && typesList.contains(piece.type())) {
-                neededSquares.add(square);
-              }
-            });
+        square -> {
+          Piece piece = getPiece(square);
+          if (piece != null && piece.color() == color && typesList.contains(piece.type())) {
+            neededSquares.add(square);
+          }
+        });
 
     return neededSquares;
   }
 
+  @Override
+  public List<Square> getColoredPieces(PieceColor color) {
+    return getColoredPieces(
+        color,
+        PieceType.KING,
+        PieceType.ROOK,
+        PieceType.BISHOP,
+        PieceType.KNIGHT,
+        PieceType.QUEEN,
+        PieceType.PAWN);
+  }
 
   @Override
   public boolean isOccupied(Square square) {

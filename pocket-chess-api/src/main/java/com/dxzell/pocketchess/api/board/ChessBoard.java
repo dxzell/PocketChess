@@ -31,11 +31,19 @@ public interface ChessBoard {
   boolean isOccupied(Square square);
 
   /**
-   * Gets all the squares from the specified piece types with the specified color
+   * Gets all the squares from the specified piece types with the specified color.
    *
    * @param color the color of the specified piece types
    * @param types the type of the needed pieces
    * @return the squares of all pieces with the specified type and color
    */
   List<Square> getColoredPieces(PieceColor color, PieceType... types);
+
+  /**
+   * Gets all the squares from every piece with the specified color.
+   *
+   * @param color the color of the requested pieces
+   * @return the squares of all pieces with the specified color
+   */
+  List<Square> getColoredPieces(PieceColor color);
 }

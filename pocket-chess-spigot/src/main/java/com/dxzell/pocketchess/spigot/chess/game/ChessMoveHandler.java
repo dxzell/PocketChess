@@ -1,5 +1,6 @@
 package com.dxzell.pocketchess.spigot.chess.game;
 
+import com.dxzell.pocketchess.api.board.ChessBoard;
 import com.dxzell.pocketchess.api.board.Square;
 import com.dxzell.pocketchess.api.game.ChessGame;
 import com.dxzell.pocketchess.api.move.Move;
@@ -16,6 +17,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -166,7 +169,7 @@ public final class ChessMoveHandler {
    * @param destination the square the piece was moved to
    */
   private void finishMove(Square destination) {
-    if (isDraw() || isStalemate()) {
+    if (isDraw(chessGame.getChessBoard()) || isStalemate()) {
       spigotChessGame.endGame(null);
       return;
     }
@@ -226,8 +229,58 @@ public final class ChessMoveHandler {
     }
   }
 
-  private boolean isDraw() {
-    return false;
+  /**
+   * @param chessBoard the chess board that is being played on
+   * @return whether the current chess board state is a draw
+   */
+  private boolean isDraw(ChessBoard chessBoard) {
+    return isDraw(chessBoard, List.of(PieceType.KING), List.of(PieceType.KING))
+        || isDraw(chessBoard, List.of(PieceType.KING, PieceType.BISHOP), List.of(PieceType.KING))
+        || isDraw(chessBoard, List.of(PieceType.KING), List.of(PieceType.KING, PieceType.BISHOP))
+        || isDraw(chessBoard, List.of(PieceType.KING, PieceType.KNIGHT), List.of(PieceType.KING))
+        || isDraw(chessBoard, List.of(PieceType.KING), List.of(PieceType.KING, PieceType.KNIGHT));
+  }
+
+  /**
+   * @param chessBoard the chess board that is being played on
+   * @param whiteDrawPieceTypes the white piece types needed for a draw position
+   * @param blackDrawPieceTypes the black piece types needed for a draw position
+   * @return whether the current chess board state is a draw
+   */
+  private boolean isDraw(
+      ChessBoard chessBoard,
+      List<PieceType> whiteDrawPieceTypes,
+      List<PieceType> blackDrawPieceTypes) {
+
+    return hasExactlyPieces(chessBoard, PieceColor.WHITE, whiteDrawPieceTypes)
+        && hasExactlyPieces(chessBoard, PieceColor.BLACK, blackDrawPieceTypes);
+  }
+
+  /**
+   * @param chessBoard the chess board that is being played on
+   * @param color the color of the player of the given piece types
+   * @param expectedPieceTypes the expected piece types for a draw
+   * @return whether the given color pieces are exactly the given expected piece types
+   */
+  private boolean hasExactlyPieces(
+      ChessBoard chessBoard, PieceColor color, List<PieceType> expectedPieceTypes) {
+    List<Square> pieceSquares = chessBoard.getColoredPieces(color);
+    List<PieceType> remainingExpectedPieceTypes = new ArrayList<>(expectedPieceTypes);
+    for (Square pieceSquare : pieceSquares) {
+      Piece piece = chessBoard.getPiece(pieceSquare);
+
+      if (piece == null) {
+        continue;
+      }
+
+      boolean removed = remainingExpectedPieceTypes.remove(piece.type());
+
+      if (!removed) {
+        return false;
+      }
+    }
+
+    return remainingExpectedPieceTypes.isEmpty();
   }
 
   /**

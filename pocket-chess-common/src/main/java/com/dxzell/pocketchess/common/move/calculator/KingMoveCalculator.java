@@ -4,11 +4,13 @@ import com.dxzell.pocketchess.api.board.ChessBoard;
 import com.dxzell.pocketchess.api.board.Square;
 import com.dxzell.pocketchess.api.piece.Piece;
 import com.dxzell.pocketchess.api.piece.PieceColor;
+import com.dxzell.pocketchess.api.piece.PieceType;
 import com.dxzell.pocketchess.common.board.SquareUtils;
 import com.dxzell.pocketchess.common.move.calculator.type.PieceMoveCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** Calculates possible king moves. */
 public final class KingMoveCalculator extends PieceMoveCalculator {
@@ -40,7 +42,7 @@ public final class KingMoveCalculator extends PieceMoveCalculator {
   }
 
   /**
-   * Filters out every square that is already occupied by a piece of the same color.
+   * Filters out every square that the king is not allowed to move to.
    *
    * @param squares the list of possible moves
    * @param board the associated chess board
@@ -48,13 +50,72 @@ public final class KingMoveCalculator extends PieceMoveCalculator {
    * @return the filtered list of possible moves
    */
   private List<Square> filterOutInvalidSquares(
-      List<Square> squares, ChessBoard board, PieceColor kingColor) {
+          List<Square> squares, ChessBoard board, PieceColor kingColor) {
     return squares.stream()
-        .filter(
-            targetSquare ->
-                targetSquare != null
-                    && (board.getPiece(targetSquare) == null
-                        || board.getPiece(targetSquare).color() != kingColor))
-        .toList();
+            .filter(Objects::nonNull)
+            .filter(targetSquare -> !isOccupiedByOwnPiece(board, targetSquare, kingColor))
+            .filter(targetSquare -> !isOccupiedByEnemyKing(board, targetSquare, kingColor))
+            .filter(targetSquare -> !isNextToEnemyKing(board, targetSquare, kingColor))
+            .toList();
+  }
+
+  /**
+   * @param board the associated chess board
+   * @param square the square to check
+   * @param kingColor the color of the king
+   * @return whether the given square is occupied by an own piece
+   */
+  private boolean isOccupiedByOwnPiece(ChessBoard board, Square square, PieceColor kingColor) {
+    Piece piece = board.getPiece(square);
+
+    return piece != null && piece.color() == kingColor;
+  }
+
+  /**
+   * @param board the associated chess board
+   * @param square the square to check
+   * @param kingColor the color of the king
+   * @return whether the given square is occupied by an enemy king
+   */
+  private boolean isOccupiedByEnemyKing(ChessBoard board, Square square, PieceColor kingColor) {
+    Piece piece = board.getPiece(square);
+
+    return piece != null
+            && piece.color() != kingColor
+            && piece.type() == PieceType.KING;
+  }
+
+  /**
+   * @param board the associated chess board
+   * @param square the square to check
+   * @param kingColor the color of the king
+   * @return whether the given square is next to the enemy king
+   */
+  private boolean isNextToEnemyKing(ChessBoard board, Square square, PieceColor kingColor) {
+    PieceColor enemyColor = PieceColor.getOtherColor(kingColor);
+
+    for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+      for (int columnOffset = -1; columnOffset <= 1; columnOffset++) {
+        if (rowOffset == 0 && columnOffset == 0) {
+          continue;
+        }
+
+        Square offsetSquare = SquareUtils.offsetOrNull(square, rowOffset, columnOffset);
+
+        if (offsetSquare == null) {
+          continue;
+        }
+
+        Piece adjacentPiece = board.getPiece(offsetSquare);
+
+        if (adjacentPiece != null
+                && adjacentPiece.color() == enemyColor
+                && adjacentPiece.type() == PieceType.KING) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }
