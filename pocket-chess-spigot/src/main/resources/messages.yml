@@ -24,7 +24,7 @@ messages:
     no-ongoing-request: '&cThere is no ongoing duel request from this player.'
     you-declined-request: '&7You have declined the duel request from [opponent].'
     opponent-declined-request: '&7[opponent] has declined your duel request.'
-
+    invalid-args-command: '&cInvalid arguments. Use &6/chess help &cto display all the existing commands.'
 
   # Any chess game related message:
   chess-game:
