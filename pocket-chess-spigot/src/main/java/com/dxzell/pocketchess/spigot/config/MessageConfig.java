@@ -147,6 +147,10 @@ public final class MessageConfig extends Config {
         .replace("[opponent]", receiverName);
   }
 
+  public String getInvalidArgsCmd() {
+    return getColoredString(getChessCommandMessagePath() + "invalid-args-command");
+  }
+
   private String getChessCommandMessagePath() {
     return "messages.chess-command.";
   }
